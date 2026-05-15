@@ -1,0 +1,27 @@
+# Apache — thư mục public (document root nên trỏ vào đây)
+
+# Trang mặc định (khớp tên file Index.php của dự án)
+DirectoryIndex Index.php index.php index.html
+
+# Tắt liệt kê thư mục
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Document root = public: giữ "/". Nếu URL dạng localhost/.../public/... thì sửa cho khớp, ví dụ:
+    # RewriteBase /PMNM_68PM4_NguyenQuangTung_0028068/public/
+    RewriteBase /
+
+    # Cho phép truy cập file và thư mục thật
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Đưa về Index.php và truyền url=... (giống mẫu $_GET['url'])
+    RewriteRule ^(.*)$ Index.php?url=$1 [QSA,L]
+</IfModule>
+
+# Chặn truy cập trực tiếp file ẩn / cấu hình (Apache 2.4)
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
