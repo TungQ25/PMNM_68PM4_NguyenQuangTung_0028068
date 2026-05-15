@@ -1,27 +1,30 @@
-# Apache — thư mục public (document root nên trỏ vào đây)
+# Thư mục public — mọi request đi qua index.php (router MVC)
 
-# Trang mặc định (khớp tên file Index.php của dự án)
-DirectoryIndex Index.php index.php index.html
+DirectoryIndex index.php index.html
 
-# Tắt liệt kê thư mục
 Options -Indexes
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    # Document root = public: giữ "/". Nếu URL dạng localhost/.../public/... thì sửa cho khớp, ví dụ:
-    # RewriteBase /PMNM_68PM4_NguyenQuangTung_0028068/public/
-    RewriteBase /
 
-    # Cho phép truy cập file và thư mục thật
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
+    # Không khai báo RewriteBase → Apache tự lấy theo thư mục public (ổn với XAMPP).
+    # Chỉ bật khi rewrite lỗi, ví dụ virtual host document root = public:
+    # RewriteBase /
 
-    # Đưa về Index.php và truyền url=... (giống mẫu $_GET['url'])
-    RewriteRule ^(.*)$ Index.php?url=$1 [QSA,L]
+    # Không rewrite file/thư mục thật (css, ảnh, index.php...)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Trang chủ: /
+    RewriteRule ^$ index.php [L,QSA]
+
+    # URL còn lại → ?url=controller/action/...
+    RewriteRule ^(.+)$ index.php?url=$1 [L,QSA]
 </IfModule>
 
-# Chặn truy cập trực tiếp file ẩn / cấu hình (Apache 2.4)
-<FilesMatch "^\.">
-    Require all denied
-</FilesMatch>
+# Chặn truy cập file ẩn (.htaccess, .env...)
+<IfModule mod_authz_core.c>
+    <FilesMatch "^\.">
+        Require all denied
+    </FilesMatch>
+</IfModule>
