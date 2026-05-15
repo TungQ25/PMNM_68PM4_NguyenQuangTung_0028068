@@ -1,0 +1,10 @@
+# Phòng TH người dùng ko gõ /public/...
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Đã vào public/ thì dừng
+    RewriteRule ^public/ - [L]
+
+    RewriteRule ^$ public/ [L]
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

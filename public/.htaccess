@@ -3,9 +3,8 @@ Options -Indexes
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Không khai báo RewriteBase → Apache tự lấy theo thư mục public (ổn với XAMPP).
-    # Chỉ bật khi rewrite lỗi, ví dụ virtual host document root = public:
-    # RewriteBase /
+    # Luôn phục vụ tài nguyên tĩnh trực tiếp
+    RewriteRule ^(css|js|images|fonts|assets)/ - [L]
 
     # Không rewrite file/thư mục thật (css, ảnh, index.php...)
     RewriteCond %{REQUEST_FILENAME} !-f
