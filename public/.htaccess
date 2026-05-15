@@ -1,7 +1,3 @@
-# Thư mục public — mọi request đi qua index.php (router MVC)
-
-DirectoryIndex index.php index.html
-
 Options -Indexes
 
 <IfModule mod_rewrite.c>

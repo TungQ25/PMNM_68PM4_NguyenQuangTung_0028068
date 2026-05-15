@@ -1,0 +1,32 @@
+# Chuẩn hóa kết thúc dòng: Git tự nhận text; khi checkout trên Windows vẫn ổn định
+* text=auto
+
+*.php   text diff=php
+*.phtml text diff=php
+*.inc   text diff=php
+*.css   text diff=css
+*.scss  text diff=css
+*.js    text
+*.json  text
+*.md    text
+*.xml   text
+*.yml   text
+*.yaml  text
+*.sql   text
+*.sh    text eol=lf
+.htaccess text
+
+# File nhị phân — không đổi dòng / không merge theo text
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.webp binary
+*.pdf  binary
+*.zip  binary
+*.gz   binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary
