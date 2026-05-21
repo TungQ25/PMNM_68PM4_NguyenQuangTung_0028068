@@ -11,6 +11,7 @@ final class App
     private const CONTROLLER_CLASSES = [
         'home' => HomeController::class,
         'sinhvien' => SinhvienController::class,
+        'auth' => AuthController::class,
     ];
 
     public function dispatch(): void
@@ -55,6 +56,11 @@ final class App
         }
 
         $params = $rest ? array_values($rest) : [];
+
+        // Kiểm tra đã login hay chưa
+        if (!AuthMiddleware::handle($controllerSlug, $action)) {
+            return;
+        }
 
         $this->invokeAction($controller, $action, $params);
     }

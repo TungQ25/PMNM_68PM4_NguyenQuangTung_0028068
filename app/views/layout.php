@@ -2,6 +2,7 @@
 /** @var string $content */
 /** @var string $pageTitle */
 $base = defined('BASE_URL') ? BASE_URL : '';
+$user = $_SESSION['user'] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -20,6 +21,11 @@ $base = defined('BASE_URL') ? BASE_URL : '';
                 <a href="<?= htmlspecialchars($base . '/home/gioithieu', ENT_QUOTES, 'UTF-8') ?>">Giới thiệu</a>
                 <a href="<?= htmlspecialchars($base . '/sinhvien', ENT_QUOTES, 'UTF-8') ?>">Sinh viên</a>
                 <a href="<?= htmlspecialchars($base . '/sinhvien/create', ENT_QUOTES, 'UTF-8') ?>">Tạo SV</a>
+                <?php if ($user): ?>
+                    <a href="<?= htmlspecialchars($base . '/auth/logout', ENT_QUOTES, 'UTF-8') ?>">Đăng xuất</a>
+                <?php else: ?>
+                    <a href="<?= htmlspecialchars($base . '/auth/login', ENT_QUOTES, 'UTF-8') ?>">Đăng nhập</a>
+                <?php endif; ?>
             </nav>
         </div>
     </header>

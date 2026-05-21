@@ -181,6 +181,23 @@ code {
     margin-top: 0.25rem;
 }
 
+.auth-card {
+    max-width: 520px;
+    margin-inline: auto;
+}
+
+.alert {
+    margin: 1rem 0;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.error-alert {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
 .placeholder-table {
     margin-top: 1rem;
     padding: 1rem;

@@ -7,7 +7,8 @@ final class HomeController extends Controller
     public function index(): void
     {
         $this->render('home/index', [
-            'pageTitle' => 'Trang chủ',
+            'pageTitle' => 'Trang Chủ',
+            'username' => $_SESSION['user']['username'] ?? '',
         ]);
     }
 

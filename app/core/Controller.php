@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 class Controller
 {
+    protected function redirect(string $path): void
+    {
+        $base = defined('BASE_URL') ? BASE_URL : '';
+        header('Location: ' . $base . $path);
+        exit;
+    }
+
     protected function render(string $view, array $data = []): void
     {
         extract($data, EXTR_SKIP);
