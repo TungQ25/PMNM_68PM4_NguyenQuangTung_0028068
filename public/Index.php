@@ -14,6 +14,7 @@ $base = $scriptDir === '/public' ? '' : $scriptDir;
 define('BASE_URL', $base === '' ? '' : $base);
 
 require_once ROOT_PATH . '/app/core/Controller.php';
+require_once ROOT_PATH . '/app/core/Database.php';
 require_once ROOT_PATH . '/app/core/AuthMiddleware.php';
 require_once ROOT_PATH . '/app/core/App.php';
 
