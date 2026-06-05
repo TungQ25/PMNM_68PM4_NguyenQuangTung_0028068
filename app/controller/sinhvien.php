@@ -42,8 +42,13 @@ final class SinhvienController extends Controller
             } elseif ($this->model()->existsByMasv($old['masv'])) {
                 $error = 'Mã sinh viên đã tồn tại.';
             } else {
-                $this->model()->create($old['hoten'], $old['masv']);
-                $this->redirect('/sinhvien');
+                try {
+                    $this->model()->create($old['hoten'], $old['masv']);
+                    $this->redirect('/sinhvien');
+                } catch (PDOException $exception) {
+                    unset($exception);
+                    $error = 'Không thể thêm sinh viên. Vui lòng thử lại.';
+                }
             }
         }
 

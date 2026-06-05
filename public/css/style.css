@@ -209,6 +209,25 @@ code {
     border: 1px dashed var(--border);
     border-radius: 8px;
     color: var(--muted);
+    overflow-x: auto;
+}
+
+.placeholder-table table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text);
+}
+
+.placeholder-table th,
+.placeholder-table td {
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.placeholder-table th {
+    color: var(--muted);
+    font-weight: 600;
 }
 
 .error h1 {
