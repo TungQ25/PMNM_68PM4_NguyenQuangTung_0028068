@@ -24,6 +24,6 @@ class Controller
         require $viewPath;
         $content = ob_get_clean();
         $pageTitle = $data['pageTitle'] ?? 'Ứng dụng';
-        require ROOT_PATH . '/app/views/layout.php';
+        require ROOT_PATH . '/app/views/layoutmaster.php';
     }
 }
