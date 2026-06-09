@@ -31,15 +31,25 @@ $pageUrl = static function (int $page) use ($base): string {
                         <th>Họ tên</th>
                         <th>Mã SV</th>
                         <th>Ngày tạo</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($sinhvien as $index => $sv): ?>
+                        <?php $id = (int) ($sv['id'] ?? 0); ?>
                         <tr>
                             <td><?= $offset + $index + 1 ?></td>
                             <td><?= htmlspecialchars((string) ($sv['hoten'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars((string) ($sv['masv'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars((string) ($sv['created_at'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a class="btn ghost" href="<?= htmlspecialchars($base . '/sinhvien/edit/' . $id, ENT_QUOTES, 'UTF-8') ?>">Sửa</a>
+                                    <form method="post" action="<?= htmlspecialchars($base . '/sinhvien/delete/' . $id, ENT_QUOTES, 'UTF-8') ?>" onsubmit="return confirm('Bạn có chắc muốn xóa sinh viên này?');">
+                                        <button type="submit" class="btn danger">Xóa</button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -50,8 +60,7 @@ $pageUrl = static function (int $page) use ($base): string {
     <?php if ($totalRows > 0 && $totalPages > 1): ?>
         <nav class="pagination" aria-label="Phân trang">
             <?php if ($currentPage > 1): ?>
-                <a class="btn ghost" href="<?= htmlspecialchars($pageUrl($currentPage - 1), ENT_QUOTES, 'UTF-8') ?>">
-                    << /a>
+                <a class="btn ghost" href="<?= htmlspecialchars($pageUrl($currentPage - 1), ENT_QUOTES, 'UTF-8') ?>">&lt;</a>
                     <?php endif; ?> <!-- Hiển thị nút "Trước" nếu không phải trang đầu -->
 
                     <?php for ($page = 1; $page <= $totalPages; $page++): ?>
@@ -62,7 +71,7 @@ $pageUrl = static function (int $page) use ($base): string {
                     <?php endfor; ?> <!-- Hiển thị các nút trang -->
 
                     <?php if ($currentPage < $totalPages): ?>
-                        <a class="btn ghost" href="<?= htmlspecialchars($pageUrl($currentPage + 1), ENT_QUOTES, 'UTF-8') ?>">></a>
+                        <a class="btn ghost" href="<?= htmlspecialchars($pageUrl($currentPage + 1), ENT_QUOTES, 'UTF-8') ?>">&gt;</a>
                     <?php endif; ?> <!-- Hiển thị nút "Tiếp" nếu không phải trang cuối -->
         </nav>
     <?php endif; ?>
