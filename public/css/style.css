@@ -203,6 +203,11 @@ code {
     color: var(--danger);
 }
 
+.success-alert {
+    border-color: #3fbf7f;
+    color: #7ee2ad;
+}
+
 .placeholder-table {
     margin-top: 1rem;
     padding: 1rem;
@@ -228,6 +233,13 @@ code {
 .placeholder-table th {
     color: var(--muted);
     font-weight: 600;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
 }
 
 .error h1 {

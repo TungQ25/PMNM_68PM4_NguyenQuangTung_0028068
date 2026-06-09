@@ -28,6 +28,25 @@ final class Sinhvien
         ]);
     }
 
+    public function paginate(int $limit, int $offset): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT id, hoten, masv, created_at FROM sinhvien ORDER BY id DESC LIMIT :limit OFFSET :offset'
+        );
+        $stmt->bindValue('limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue('offset', $offset, PDO::PARAM_INT);
+        $stmt->execute(); 
+
+        return $stmt->fetchAll();
+    }
+
+    public function countAll(): int
+    {
+        $stmt = $this->db->query('SELECT COUNT(*) FROM sinhvien');
+
+        return (int) $stmt->fetchColumn();
+    }
+
     public function existsByMasv(string $masv): bool
     {
         $stmt = $this->db->prepare(

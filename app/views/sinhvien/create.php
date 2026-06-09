@@ -3,10 +3,14 @@ $old = $old ?? ['hoten' => '', 'masv' => ''];
 $base = defined('BASE_URL') ? BASE_URL : '';
 ?>
 <section class="card">
-    <h1>Thêm sinh viên</h1>
+    <h1>Th&ecirc;m sinh vi&ecirc;n</h1>
 
     <?php if (!empty($error)): ?>
         <div class="alert error-alert"><?= htmlspecialchars((string) $error, ENT_QUOTES, 'UTF-8') ?></div>
+    <?php endif; ?>
+
+    <?php if (!empty($success)): ?>
+        <div class="alert success-alert"><?= htmlspecialchars((string) $success, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
 
     <form class="form" method="post" action="<?= htmlspecialchars($base . '/sinhvien/create', ENT_QUOTES, 'UTF-8') ?>">
