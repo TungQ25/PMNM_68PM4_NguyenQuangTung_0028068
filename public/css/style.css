@@ -158,6 +158,17 @@ code {
     border-style: dashed;
 }
 
+.btn.danger {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.btn.danger:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+}
+
 .form {
     display: grid;
     gap: 1rem;
@@ -203,6 +214,11 @@ code {
     color: var(--danger);
 }
 
+.success-alert {
+    border-color: #3fbf7f;
+    color: #7ee2ad;
+}
+
 .placeholder-table {
     margin-top: 1rem;
     padding: 1rem;
@@ -228,6 +244,23 @@ code {
 .placeholder-table th {
     color: var(--muted);
     font-weight: 600;
+}
+
+.table-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.table-actions form {
+    margin: 0;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
 }
 
 .error h1 {

@@ -1,9 +1,10 @@
 <?php
 $old = $old ?? ['hoten' => '', 'masv' => ''];
+$sinhvienId = isset($sinhvienId) ? (int) $sinhvienId : 0;
 $base = defined('BASE_URL') ? BASE_URL : '';
 ?>
 <section class="card">
-    <h1>Th&ecirc;m sinh vi&ecirc;n</h1>
+    <h1>Cập nhật sinh viên</h1>
 
     <?php if (!empty($error)): ?>
         <div class="alert error-alert"><?= htmlspecialchars((string) $error, ENT_QUOTES, 'UTF-8') ?></div>
@@ -13,7 +14,7 @@ $base = defined('BASE_URL') ? BASE_URL : '';
         <div class="alert success-alert"><?= htmlspecialchars((string) $success, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
 
-    <form class="form" method="post" action="<?= htmlspecialchars($base . '/sinhvien/create', ENT_QUOTES, 'UTF-8') ?>">
+    <form class="form" method="post" action="<?= htmlspecialchars($base . '/sinhvien/edit/' . $sinhvienId, ENT_QUOTES, 'UTF-8') ?>">
         <label>
             Họ tên
             <input type="text" name="hoten" placeholder="Nguyễn Văn A" autocomplete="name" value="<?= htmlspecialchars((string) ($old['hoten'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" required>
@@ -25,7 +26,7 @@ $base = defined('BASE_URL') ? BASE_URL : '';
         </label>
 
         <div class="form-actions">
-            <button type="submit" class="btn primary">Lưu</button>
+            <button type="submit" class="btn primary">Cập nhật</button>
             <a class="btn ghost" href="<?= htmlspecialchars($base . '/sinhvien', ENT_QUOTES, 'UTF-8') ?>">Quay lại danh sách</a>
         </div>
     </form>
