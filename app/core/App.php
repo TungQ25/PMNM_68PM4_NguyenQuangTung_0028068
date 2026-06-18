@@ -11,6 +11,7 @@ final class App
     private const CONTROLLER_CLASSES = [
         'home' => HomeController::class,
         'sinhvien' => SinhvienController::class,
+        'lophoc' => LophocController::class,
         'auth' => AuthController::class,
     ];
 

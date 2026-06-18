@@ -7,6 +7,7 @@ final class AuthMiddleware
     private const PROTECTED_CONTROLLERS = [
         'home',
         'sinhvien',
+        'lophoc',
     ];
 
     public static function handle(string $controller, string $action): bool
