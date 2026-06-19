@@ -182,7 +182,8 @@ code {
     color: var(--muted);
 }
 
-.form input {
+.form input,
+.form select {
     padding: 0.55rem 0.65rem;
     border-radius: 8px;
     border: 1px solid var(--border);

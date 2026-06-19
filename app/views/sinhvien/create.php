@@ -1,9 +1,10 @@
 <?php
-$old = $old ?? ['hoten' => '', 'masv' => ''];
+$old = $old ?? ['hoten' => '', 'masv' => '', 'malop' => ''];
+$lophoc = isset($lophoc) && is_array($lophoc) ? $lophoc : [];
 $base = defined('BASE_URL') ? BASE_URL : '';
 ?>
 <section class="card">
-    <h1>Th&ecirc;m sinh vi&ecirc;n</h1>
+    <h1>Thêm sinh viên</h1>
 
     <?php if (!empty($error)): ?>
         <div class="alert error-alert"><?= htmlspecialchars((string) $error, ENT_QUOTES, 'UTF-8') ?></div>
@@ -22,6 +23,19 @@ $base = defined('BASE_URL') ? BASE_URL : '';
         <label>
             Mã SV
             <input type="text" name="masv" placeholder="SV001" value="<?= htmlspecialchars((string) ($old['masv'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" required>
+        </label>
+
+        <label>
+            Mã lớp
+            <select name="malop" required>
+                <option value="">-- Chọn lớp --</option>
+                <?php foreach ($lophoc as $lop): ?>
+                    <?php $malop = (string) ($lop['malop'] ?? ''); ?>
+                    <option value="<?= htmlspecialchars($malop, ENT_QUOTES, 'UTF-8') ?>"<?= $malop === (string) ($old['malop'] ?? '') ? ' selected' : '' ?>>
+                        <?= htmlspecialchars($malop . ' - ' . (string) ($lop['tenlop'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
         </label>
 
         <div class="form-actions">

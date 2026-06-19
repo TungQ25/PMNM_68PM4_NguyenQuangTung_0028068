@@ -41,6 +41,7 @@ $pageUrl = static function (int $page) use ($base): string {
                             <td><?= $offset + $index + 1 ?></td>
                             <td><?= htmlspecialchars((string) ($sv['hoten'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars((string) ($sv['masv'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
+                            <td><?= htmlspecialchars((string) ($sv['malop'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars((string) ($sv['created_at'] ?? ''), ENT_QUOTES, 'UTF-8') ?></td>
                             <td>
                                 <div class="table-actions">
@@ -61,18 +62,18 @@ $pageUrl = static function (int $page) use ($base): string {
         <nav class="pagination" aria-label="Phân trang">
             <?php if ($currentPage > 1): ?>
                 <a class="btn ghost" href="<?= htmlspecialchars($pageUrl($currentPage - 1), ENT_QUOTES, 'UTF-8') ?>">&lt;</a>
-                    <?php endif; ?> <!-- Hiển thị nút "Trước" nếu không phải trang đầu -->
+            <?php endif; ?> <!-- Hiển thị nút "Trước" nếu không phải trang đầu -->
 
-                    <?php for ($page = 1; $page <= $totalPages; $page++): ?>
-                        <a
-                            class="btn<?= $page === $currentPage ? ' primary' : ' ghost' ?>"
-                            href="<?= htmlspecialchars($pageUrl($page), ENT_QUOTES, 'UTF-8') ?>"
-                            aria-current="<?= $page === $currentPage ? 'page' : 'false' ?>"><?= $page ?></a>
-                    <?php endfor; ?> <!-- Hiển thị các nút trang -->
+            <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+                <a
+                    class="btn<?= $page === $currentPage ? ' primary' : ' ghost' ?>"
+                    href="<?= htmlspecialchars($pageUrl($page), ENT_QUOTES, 'UTF-8') ?>"
+                    aria-current="<?= $page === $currentPage ? 'page' : 'false' ?>"><?= $page ?></a>
+            <?php endfor; ?> <!-- Hiển thị các nút trang -->
 
-                    <?php if ($currentPage < $totalPages): ?>
-                        <a class="btn ghost" href="<?= htmlspecialchars($pageUrl($currentPage + 1), ENT_QUOTES, 'UTF-8') ?>">&gt;</a>
-                    <?php endif; ?> <!-- Hiển thị nút "Tiếp" nếu không phải trang cuối -->
+            <?php if ($currentPage < $totalPages): ?>
+                <a class="btn ghost" href="<?= htmlspecialchars($pageUrl($currentPage + 1), ENT_QUOTES, 'UTF-8') ?>">&gt;</a>
+            <?php endif; ?> <!-- Hiển thị nút "Tiếp" nếu không phải trang cuối -->
         </nav>
     <?php endif; ?>
 </section>

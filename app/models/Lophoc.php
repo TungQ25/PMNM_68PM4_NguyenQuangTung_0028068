@@ -8,6 +8,15 @@ final class Lophoc
     {
     }
 
+    public function all(): array
+    {
+        $stmt = $this->db->query(
+            'SELECT id, malop, tenlop, created_at FROM lophoc ORDER BY malop ASC'
+        );
+
+        return $stmt->fetchAll();
+    }
+
     public function create(string $malop, string $tenlop): void
     {
         $stmt = $this->db->prepare(

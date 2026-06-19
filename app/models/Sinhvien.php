@@ -11,27 +11,28 @@ final class Sinhvien
     public function all(): array
     {
         $stmt = $this->db->query(
-            'SELECT id, hoten, masv, created_at FROM sinhvien ORDER BY id DESC'
+            'SELECT id, hoten, masv, malop, created_at FROM sinhvien ORDER BY id DESC'
         );
 
         return $stmt->fetchAll();
     }
 
-    public function create(string $hoten, string $masv): void
+    public function create(string $hoten, string $masv, string $malop): void
     {
         $stmt = $this->db->prepare(
-            'INSERT INTO sinhvien (hoten, masv) VALUES (:hoten, :masv)'
+            'INSERT INTO sinhvien (hoten, masv, malop) VALUES (:hoten, :masv, :malop)'
         );
         $stmt->execute([
             'hoten' => $hoten,
             'masv' => $masv,
+            'malop' => $malop,
         ]);
     }
 
     public function find(int $id): ?array
     {
         $stmt = $this->db->prepare(
-            'SELECT id, hoten, masv, created_at FROM sinhvien WHERE id = :id'
+            'SELECT id, hoten, masv, malop, created_at FROM sinhvien WHERE id = :id'
         );
         $stmt->execute(['id' => $id]);
         $sinhvien = $stmt->fetch();
@@ -39,15 +40,16 @@ final class Sinhvien
         return $sinhvien === false ? null : $sinhvien;
     }
 
-    public function update(int $id, string $hoten, string $masv): void
+    public function update(int $id, string $hoten, string $masv, string $malop): void
     {
         $stmt = $this->db->prepare(
-            'UPDATE sinhvien SET hoten = :hoten, masv = :masv WHERE id = :id'
+            'UPDATE sinhvien SET hoten = :hoten, masv = :masv, malop = :malop WHERE id = :id'
         );
         $stmt->execute([
             'id' => $id,
             'hoten' => $hoten,
             'masv' => $masv,
+            'malop' => $malop,
         ]);
     }
     
@@ -60,7 +62,7 @@ final class Sinhvien
     public function paginate(int $limit, int $offset): array
     {
         $stmt = $this->db->prepare(
-            'SELECT id, hoten, masv, created_at FROM sinhvien ORDER BY id DESC LIMIT :limit OFFSET :offset'
+            'SELECT id, hoten, masv, malop, created_at FROM sinhvien ORDER BY id DESC LIMIT :limit OFFSET :offset'
         );
         $stmt->bindValue('limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue('offset', $offset, PDO::PARAM_INT);

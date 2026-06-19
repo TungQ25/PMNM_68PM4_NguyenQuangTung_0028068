@@ -3,10 +3,12 @@
 declare(strict_types=1);
 
 require_once ROOT_PATH . '/app/models/Sinhvien.php';
+require_once ROOT_PATH . '/app/models/Lophoc.php';
 
 final class SinhvienController extends Controller
 {
     private ?Sinhvien $sinhvien = null;
+    private ?Lophoc $lophoc = null;
 
     private function model(): Sinhvien
     {
@@ -15,6 +17,15 @@ final class SinhvienController extends Controller
         }
 
         return $this->sinhvien;
+    }
+
+    private function lophocModel(): Lophoc
+    {
+        if (!$this->lophoc instanceof Lophoc) {
+            $this->lophoc = new Lophoc(Database::connection());
+        }
+
+        return $this->lophoc;
     }
 
     public function index(): void
@@ -43,11 +54,14 @@ final class SinhvienController extends Controller
         $old = [
             'hoten' => '',
             'masv' => '',
+            'malop' => '',
         ];
+        $lophoc = $this->lophocModel()->all();
 
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $old['hoten'] = trim((string) ($_POST['hoten'] ?? ''));
             $old['masv'] = trim((string) ($_POST['masv'] ?? ''));
+            $old['malop'] = trim((string) ($_POST['malop'] ?? ''));
 
             if ($old['hoten'] === '' || $old['masv'] === '') {
                 $error = 'Vui lòng nhập đầy đủ họ tên và mã sinh viên.';
@@ -55,11 +69,12 @@ final class SinhvienController extends Controller
                 $error = 'Mã sinh viên đã tồn tại.';
             } else {
                 try {
-                    $this->model()->create($old['hoten'], $old['masv']);
+                    $this->model()->create($old['hoten'], $old['masv'], $old['malop']);
                     $success = 'Thêm sinh viên thành công.';
                     $old = [
                         'hoten' => '',
                         'masv' => '',
+                        'malop' => '',
                     ];
                 } catch (PDOException $exception) {
                     unset($exception);
@@ -73,6 +88,7 @@ final class SinhvienController extends Controller
             'error' => $error,
             'success' => $success,
             'old' => $old,
+            'lophoc' => $lophoc,
         ]);
     }
 
@@ -93,19 +109,24 @@ final class SinhvienController extends Controller
         $old = [
             'hoten' => (string) ($student['hoten'] ?? ''),
             'masv' => (string) ($student['masv'] ?? ''),
+            'malop' => (string) ($student['malop'] ?? ''),
         ];
+        $lophoc = $this->lophocModel()->all();
 
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $old['hoten'] = trim((string) ($_POST['hoten'] ?? ''));
             $old['masv'] = trim((string) ($_POST['masv'] ?? ''));
+            $old['malop'] = trim((string) ($_POST['malop'] ?? ''));
 
-            if ($old['hoten'] === '' || $old['masv'] === '') {
-                $error = 'Vui lòng nhập đầy đủ họ tên và mã sinh viên.';
+            if ($old['hoten'] === '' || $old['masv'] === '' || $old['malop'] === '') {
+                $error = 'Vui lòng nhập đầy đủ họ tên, mã sinh viên và mã lớp.';
             } elseif ($this->model()->existsByMasvExceptId($old['masv'], $sinhvienId)) {
                 $error = 'Mã sinh viên đã tồn tại.';
+            } elseif (!$this->lophocModel()->existsByMalop($old['malop'])) {
+                $error = 'Mã lớp không tồn tại.';
             } else {
                 try {
-                    $this->model()->update($sinhvienId, $old['hoten'], $old['masv']);
+                    $this->model()->update($sinhvienId, $old['hoten'], $old['masv'], $old['malop']);
                     $success = 'Cập nhật sinh viên thành công.';
                 } catch (PDOException $exception) {
                     unset($exception);
@@ -120,6 +141,7 @@ final class SinhvienController extends Controller
             'success' => $success,
             'old' => $old,
             'sinhvienId' => $sinhvienId,
+            'lophoc' => $lophoc,
         ]);
     }
 
