@@ -11,6 +11,8 @@ $filters = isset($filters) && is_array($filters) ? $filters : [
     'malop' => '',
 ];
 $lophoc = isset($lophoc) && is_array($lophoc) ? $lophoc : [];
+$pageSizeOptions = isset($pageSizeOptions) && is_array($pageSizeOptions) ? $pageSizeOptions : [5, 10, 20, 50];
+$pageSize = isset($pageSize) ? (int) $pageSize : 5;
 $currentPage = isset($currentPage) ? (int) $currentPage : 1;
 $totalPages = isset($totalPages) ? (int) $totalPages : 1;
 $totalRows = isset($totalRows) ? (int) $totalRows : count($sinhvien);
@@ -18,21 +20,22 @@ $offset = isset($offset) ? (int) $offset : 0;
 $sort = isset($sort) ? (string) $sort : 'id';
 $direction = isset($direction) && (string) $direction === 'asc' ? 'asc' : 'desc';
 
-$baseQuery = static function () use ($filters, $sort, $direction): array {
+$baseQuery = static function () use ($filters, $sort, $direction, $pageSize): array {
     return array_filter([
         'masv' => (string) ($filters['masv'] ?? ''),
         'hoten' => (string) ($filters['hoten'] ?? ''),
         'malop' => (string) ($filters['malop'] ?? ''),
         'sort' => $sort === 'id' ? '' : $sort,
         'direction' => $sort === 'id' ? '' : $direction,
-    ], static fn (string $value): bool => $value !== '');
+        'pageSize' => $pageSize,
+    ], static fn (string|int $value): bool => (string) $value !== '');
 };
 
 $pageUrl = static function (int $page) use ($base, $baseQuery): string {
     return $base . '/sinhvien?' . http_build_query($baseQuery() + ['page' => $page]);
 };
 
-$sortUrl = static function (string $field) use ($base, $filters, $sort, $direction): string {
+$sortUrl = static function (string $field) use ($base, $filters, $sort, $direction, $pageSize): string {
     $nextDirection = $sort === $field && $direction === 'asc' ? 'desc' : 'asc';
     $query = array_filter([
         'masv' => (string) ($filters['masv'] ?? ''),
@@ -40,7 +43,8 @@ $sortUrl = static function (string $field) use ($base, $filters, $sort, $directi
         'malop' => (string) ($filters['malop'] ?? ''),
         'sort' => $field,
         'direction' => $nextDirection,
-    ], static fn (string $value): bool => $value !== '');
+        'pageSize' => $pageSize,
+    ], static fn (string|int $value): bool => (string) $value !== '');
 
     return $base . '/sinhvien?' . http_build_query($query);
 };
@@ -79,6 +83,16 @@ $sortIcon = static function (string $field) use ($sort, $direction): string {
                     <option value="<?= htmlspecialchars($malop, ENT_QUOTES, 'UTF-8') ?>"<?= $malop === (string) ($filters['malop'] ?? '') ? ' selected' : '' ?>>
                         <?= htmlspecialchars($malop . ' - ' . (string) ($lop['tenlop'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
                     </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="search-field">
+            <label for="search-page-size">Hiển thị</label>
+            <select class="search-control" id="search-page-size" name="pageSize">
+                <?php foreach ($pageSizeOptions as $option): ?>
+                    <?php $option = (int) $option; ?>
+                    <option value="<?= $option ?>"<?= $option === $pageSize ? ' selected' : '' ?>><?= $option ?> dòng</option>
                 <?php endforeach; ?>
             </select>
         </div>

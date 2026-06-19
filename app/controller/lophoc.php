@@ -19,7 +19,11 @@ final class LophocController extends Controller
 
     public function index(): void
     {
-        $perPage = 5;
+        $pageSizeOptions = [5, 10, 20, 50];
+        $perPage = (int) ($_GET['pageSize'] ?? 5);
+        if (!in_array($perPage, $pageSizeOptions, true)) {
+            $perPage = 5;
+        }
         $totalRows = $this->model()->countAll();
         $totalPages = max(1, (int) ceil($totalRows / $perPage));
         $currentPage = max(1, (int) ($_GET['page'] ?? 1));
@@ -33,6 +37,8 @@ final class LophocController extends Controller
             'totalPages' => $totalPages,
             'totalRows' => $totalRows,
             'offset' => $offset,
+            'pageSize' => $perPage,
+            'pageSizeOptions' => $pageSizeOptions,
         ]);
     }
 

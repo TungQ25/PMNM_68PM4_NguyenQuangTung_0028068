@@ -30,7 +30,11 @@ final class SinhvienController extends Controller
 
     public function index(): void
     {
-        $perPage = 5;
+        $pageSizeOptions = [5, 10, 20, 50];
+        $perPage = (int) ($_GET['pageSize'] ?? 5);
+        if (!in_array($perPage, $pageSizeOptions, true)) {
+            $perPage = 5;
+        }
         $filters = [
             'masv' => trim((string) ($_GET['masv'] ?? '')),
             'hoten' => trim((string) ($_GET['hoten'] ?? '')),
@@ -54,6 +58,8 @@ final class SinhvienController extends Controller
             'filters' => $filters,
             'sort' => $sort,
             'direction' => $direction,
+            'pageSize' => $perPage,
+            'pageSizeOptions' => $pageSizeOptions,
             'lophoc' => $this->lophocModel()->all(),
         ]);
     }
