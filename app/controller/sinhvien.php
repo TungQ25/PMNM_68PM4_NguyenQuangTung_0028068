@@ -36,6 +36,8 @@ final class SinhvienController extends Controller
             'hoten' => trim((string) ($_GET['hoten'] ?? '')),
             'malop' => trim((string) ($_GET['malop'] ?? '')),
         ];
+        $sort = in_array(($_GET['sort'] ?? ''), ['masv', 'hoten'], true) ? (string) $_GET['sort'] : 'id';
+        $direction = strtolower((string) ($_GET['direction'] ?? 'desc')) === 'asc' ? 'asc' : 'desc';
         $totalRows = $this->model()->countSearch($filters);
         $totalPages = max(1, (int) ceil($totalRows / $perPage));
         $currentPage = max(1, (int) ($_GET['page'] ?? 1));
@@ -44,12 +46,14 @@ final class SinhvienController extends Controller
 
         $this->render('sinhvien/index', [ // Render view index.php trong thư mục sinhvien
             'pageTitle' => 'Danh sách sinh viên',
-            'sinhvien' => $this->model()->search($filters, $perPage, $offset), // Lấy dữ liệu sinh viên theo trang, gọi hàm paginate trong model để chạy SQL
+            'sinhvien' => $this->model()->search($filters, $perPage, $offset, $sort, $direction), // Lấy dữ liệu sinh viên theo trang, gọi hàm paginate trong model để chạy SQL
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
             'totalRows' => $totalRows,
             'offset' => $offset,
             'filters' => $filters,
+            'sort' => $sort,
+            'direction' => $direction,
             'lophoc' => $this->lophocModel()->all(),
         ]);
     }
@@ -71,7 +75,7 @@ final class SinhvienController extends Controller
             $old['malop'] = trim((string) ($_POST['malop'] ?? ''));
 
             if ($old['hoten'] === '' || $old['masv'] === '' || $old['malop'] === '') {
-                $error = 'Vui lòng nhập đầy đủ họ tên và mã sinh viên.';
+                $error = 'Vui lòng nhập đầy đủ họ tên và mã sinh viên và mã lớp.';
             } elseif ($this->model()->existsByMasv($old['masv'])) {
                 $error = 'Mã sinh viên đã tồn tại.';
             } elseif (!$this->lophocModel()->existsByMalop($old['malop'])) {

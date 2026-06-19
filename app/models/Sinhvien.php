@@ -71,11 +71,12 @@ final class Sinhvien
         return $stmt->fetchAll();
     }
 
-    public function search(array $filters, int $limit, int $offset): array
+    public function search(array $filters, int $limit, int $offset, string $sort = 'id', string $direction = 'desc'): array
     {
         [$where, $params] = $this->buildSearchWhere($filters);
+        $orderBy = $this->buildOrderBy($sort, $direction);
         $stmt = $this->db->prepare(
-            'SELECT id, hoten, masv, malop, created_at FROM sinhvien' . $where . ' ORDER BY id DESC LIMIT :limit OFFSET :offset'
+            'SELECT id, hoten, masv, malop, created_at FROM sinhvien' . $where . $orderBy . ' LIMIT :limit OFFSET :offset'
         );
 
         foreach ($params as $name => $value) {
@@ -155,5 +156,19 @@ final class Sinhvien
             $where === [] ? '' : ' WHERE ' . implode(' AND ', $where),
             $params,
         ];
+    }
+
+    private function buildOrderBy(string $sort, string $direction): string
+    {
+        $allowedColumns = [
+            'masv' => 'masv',
+            'hoten' => 'hoten',
+            'id' => 'id',
+        ];
+
+        $column = $allowedColumns[$sort] ?? 'id';
+        $direction = strtolower($direction) === 'asc' ? 'ASC' : 'DESC';
+
+        return ' ORDER BY ' . $column . ' ' . $direction . ', id DESC';
     }
 }

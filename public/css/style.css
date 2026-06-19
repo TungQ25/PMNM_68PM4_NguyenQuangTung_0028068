@@ -323,6 +323,21 @@ select.search-control {
     font-weight: 600;
 }
 
+.sort-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.sort-link:hover {
+    color: var(--accent);
+}
+
+.sort-link .sort-icon {
+    color: var(--muted);
+    font-size: 0.85em;
+    margin-left: 0.25rem;
+}
+
 .table-actions {
     display: flex;
     flex-wrap: wrap;

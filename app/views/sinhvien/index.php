@@ -15,16 +15,42 @@ $currentPage = isset($currentPage) ? (int) $currentPage : 1;
 $totalPages = isset($totalPages) ? (int) $totalPages : 1;
 $totalRows = isset($totalRows) ? (int) $totalRows : count($sinhvien);
 $offset = isset($offset) ? (int) $offset : 0;
+$sort = isset($sort) ? (string) $sort : 'id';
+$direction = isset($direction) && (string) $direction === 'asc' ? 'asc' : 'desc';
 
-$pageUrl = static function (int $page) use ($base, $filters): string {
+$baseQuery = static function () use ($filters, $sort, $direction): array {
+    return array_filter([
+        'masv' => (string) ($filters['masv'] ?? ''),
+        'hoten' => (string) ($filters['hoten'] ?? ''),
+        'malop' => (string) ($filters['malop'] ?? ''),
+        'sort' => $sort === 'id' ? '' : $sort,
+        'direction' => $sort === 'id' ? '' : $direction,
+    ], static fn (string $value): bool => $value !== '');
+};
+
+$pageUrl = static function (int $page) use ($base, $baseQuery): string {
+    return $base . '/sinhvien?' . http_build_query($baseQuery() + ['page' => $page]);
+};
+
+$sortUrl = static function (string $field) use ($base, $filters, $sort, $direction): string {
+    $nextDirection = $sort === $field && $direction === 'asc' ? 'desc' : 'asc';
     $query = array_filter([
         'masv' => (string) ($filters['masv'] ?? ''),
         'hoten' => (string) ($filters['hoten'] ?? ''),
         'malop' => (string) ($filters['malop'] ?? ''),
-        'page' => $page,
-    ], static fn (string|int $value): bool => (string) $value !== '');
+        'sort' => $field,
+        'direction' => $nextDirection,
+    ], static fn (string $value): bool => $value !== '');
 
     return $base . '/sinhvien?' . http_build_query($query);
+};
+
+$sortIcon = static function (string $field) use ($sort, $direction): string {
+    if ($sort !== $field) {
+        return ' ▼';
+    }
+
+    return $direction === 'asc' ? ' ▲' : ' ▼';
 };
 ?>
 <section class="card">
@@ -57,6 +83,11 @@ $pageUrl = static function (int $page) use ($base, $filters): string {
             </select>
         </div>
 
+        <?php if ($sort !== 'id'): ?>
+            <input type="hidden" name="sort" value="<?= htmlspecialchars($sort, ENT_QUOTES, 'UTF-8') ?>">
+            <input type="hidden" name="direction" value="<?= htmlspecialchars($direction, ENT_QUOTES, 'UTF-8') ?>">
+        <?php endif; ?>
+
         <div class="search-actions">
             <button type="submit" class="btn primary">Tìm kiếm</button>
             <a class="btn ghost" href="<?= htmlspecialchars($base . '/sinhvien', ENT_QUOTES, 'UTF-8') ?>">Xóa lọc</a>
@@ -71,8 +102,12 @@ $pageUrl = static function (int $page) use ($base, $filters): string {
                 <thead>
                     <tr>
                         <th>STT</th>
-                        <th>Họ tên</th>
-                        <th>Mã SV</th>
+                        <th>
+                            <a class="sort-link" href="<?= htmlspecialchars($sortUrl('hoten'), ENT_QUOTES, 'UTF-8') ?>">Họ tên<?= htmlspecialchars($sortIcon('hoten'), ENT_QUOTES, 'UTF-8') ?></a>
+                        </th>
+                        <th>
+                            <a class="sort-link" href="<?= htmlspecialchars($sortUrl('masv'), ENT_QUOTES, 'UTF-8') ?>">Mã SV<?= htmlspecialchars($sortIcon('masv'), ENT_QUOTES, 'UTF-8') ?></a>
+                        </th>
                         <th>Lớp</th>
                         <th>Ngày tạo</th>
                         <th>Thao tác</th>
@@ -90,7 +125,7 @@ $pageUrl = static function (int $page) use ($base, $filters): string {
                             <td>
                                 <div class="table-actions">
                                     <a class="btn ghost" href="<?= htmlspecialchars($base . '/sinhvien/edit/' . $id, ENT_QUOTES, 'UTF-8') ?>">Sửa</a>
-                                    <form method="post" action="<?= htmlspecialchars($base . '/sinhvien/delete/' . $id, ENT_QUOTES, 'UTF-8') ?>" onsubmit="return confirm('ạn có chắc muốn xóa sinh viên này?');">
+                                    <form method="post" action="<?= htmlspecialchars($base . '/sinhvien/delete/' . $id, ENT_QUOTES, 'UTF-8') ?>" onsubmit="return confirm('Bạn có chắc muốn xóa sinh viên này?');">
                                         <button type="submit" class="btn danger">Xóa</button>
                                     </form>
                                 </div>
