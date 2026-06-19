@@ -107,6 +107,49 @@ body {
     margin-top: 0;
 }
 
+.home-hero {
+    margin-bottom: 1rem;
+}
+
+.home-hero-content {
+    max-width: 720px;
+}
+
+.home-hero h1 {
+    font-size: clamp(2rem, 5vw, 3.1rem);
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+}
+
+.home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.feature-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.feature-card h2 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.feature-card .btn {
+    align-self: flex-start;
+    margin-top: auto;
+}
+
 .lead {
     font-size: 1.05rem;
     color: var(--muted);
@@ -138,8 +181,11 @@ code {
 }
 
 .btn {
-    display: inline-block;
-    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0.55rem 1rem;
     border-radius: 8px;
     text-decoration: none;
     border: 1px solid var(--border);
@@ -147,6 +193,9 @@ code {
     background: transparent;
     cursor: pointer;
     font-size: 0.95rem;
+    font-family: inherit;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .btn:hover {
@@ -267,7 +316,7 @@ select.toolbar-select {
 .search-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 1rem;
     grid-column: 1 / -1;
 }
 
@@ -402,5 +451,9 @@ select.toolbar-select {
     .table-toolbar {
         align-items: stretch;
         flex-direction: column;
+    }
+
+    .home-grid {
+        grid-template-columns: 1fr;
     }
 }
