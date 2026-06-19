@@ -15,10 +15,10 @@ $pageUrl = static function (int $page) use ($base): string {
 };
 ?>
 <section class="card">
-    <h1>Danh sách lớp học</h1>
-    <p>
+    <div class="card-header">
+        <h1>Danh sách lớp học</h1>
         <a class="btn primary" href="<?= htmlspecialchars($base . '/lophoc/create', ENT_QUOTES, 'UTF-8') ?>">Thêm lớp học</a>
-    </p>
+    </div>
 
     <div class="placeholder-table">
         <?php if ($lophoc === []): ?>
@@ -45,7 +45,7 @@ $pageUrl = static function (int $page) use ($base): string {
                             <td>
                                 <div class="table-actions">
                                     <a class="btn ghost" href="<?= htmlspecialchars($base . '/lophoc/edit/' . $id, ENT_QUOTES, 'UTF-8') ?>">Sửa</a>
-                                    <form method="post" action="<?= htmlspecialchars($base . '/lophoc/delete/' . $id, ENT_QUOTES, 'UTF-8') ?>" onsubmit="return confirm('ạn có chắc muốn xóa lớp học này?');">
+                                    <form method="post" action="<?= htmlspecialchars($base . '/lophoc/delete/' . $id, ENT_QUOTES, 'UTF-8') ?>" onsubmit="return confirm('Bạn có chắc muốn xóa lớp học này?');">
                                         <button type="submit" class="btn danger">Xóa</button>
                                     </form>
                                 </div>
@@ -58,10 +58,10 @@ $pageUrl = static function (int $page) use ($base): string {
     </div>
 
     <?php if ($totalRows > 0 && $totalPages > 1): ?>
-        <nav class="pagination" aria-label="Phan trang">
+        <nav class="pagination" aria-label="Phân trang">
             <?php if ($currentPage > 1): ?>
                 <a class="btn ghost" href="<?= htmlspecialchars($pageUrl($currentPage - 1), ENT_QUOTES, 'UTF-8') ?>">&lt;</a>
-            <?php endif; ?>
+            <?php endif; ?> <!-- Hiển thị nút "Trước" nếu không phải trang đầu -->
 
             <?php for ($page = 1; $page <= $totalPages; $page++): ?>
                 <a

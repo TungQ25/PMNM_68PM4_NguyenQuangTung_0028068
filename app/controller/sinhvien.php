@@ -31,19 +31,26 @@ final class SinhvienController extends Controller
     public function index(): void
     {
         $perPage = 5;
-        $totalRows = $this->model()->countAll();
-        $totalPages = max(1, (int) ceil($totalRows / $perPage)); 
-        $currentPage = max(1, (int) ($_GET['page'] ?? 1)); 
-        $currentPage = min($currentPage, $totalPages); 
-        $offset = ($currentPage - 1) * $perPage; 
+        $filters = [
+            'masv' => trim((string) ($_GET['masv'] ?? '')),
+            'hoten' => trim((string) ($_GET['hoten'] ?? '')),
+            'malop' => trim((string) ($_GET['malop'] ?? '')),
+        ];
+        $totalRows = $this->model()->countSearch($filters);
+        $totalPages = max(1, (int) ceil($totalRows / $perPage));
+        $currentPage = max(1, (int) ($_GET['page'] ?? 1));
+        $currentPage = min($currentPage, $totalPages);
+        $offset = ($currentPage - 1) * $perPage;
 
         $this->render('sinhvien/index', [ // Render view index.php trong thư mục sinhvien
             'pageTitle' => 'Danh sách sinh viên',
-            'sinhvien' => $this->model()->paginate($perPage, $offset), // Lấy dữ liệu sinh viên theo trang, gọi hàm paginate trong model để chạy SQL
+            'sinhvien' => $this->model()->search($filters, $perPage, $offset), // Lấy dữ liệu sinh viên theo trang, gọi hàm paginate trong model để chạy SQL
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
             'totalRows' => $totalRows,
             'offset' => $offset,
+            'filters' => $filters,
+            'lophoc' => $this->lophocModel()->all(),
         ]);
     }
 
@@ -63,10 +70,12 @@ final class SinhvienController extends Controller
             $old['masv'] = trim((string) ($_POST['masv'] ?? ''));
             $old['malop'] = trim((string) ($_POST['malop'] ?? ''));
 
-            if ($old['hoten'] === '' || $old['masv'] === '') {
+            if ($old['hoten'] === '' || $old['masv'] === '' || $old['malop'] === '') {
                 $error = 'Vui lòng nhập đầy đủ họ tên và mã sinh viên.';
             } elseif ($this->model()->existsByMasv($old['masv'])) {
                 $error = 'Mã sinh viên đã tồn tại.';
+            } elseif (!$this->lophocModel()->existsByMalop($old['malop'])) {
+                $error = 'Mã lớp không tồn tại.';
             } else {
                 try {
                     $this->model()->create($old['hoten'], $old['masv'], $old['malop']);
